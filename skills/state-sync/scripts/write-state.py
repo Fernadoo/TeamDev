@@ -6,7 +6,8 @@ specified output file.
 
 Usage: cat state.json | write-state.py [path/to/teamdev-state.json]
 
-If no path is given, writes to ./teamdev-state.json.
+If no path is given, falls back to ${CLAUDE_PLUGIN_ROOT}/teamdev-state.json.
+Raises ValueError if CLAUDE_PLUGIN_ROOT is not set and no path is provided.
 
 Exit codes:
   0 - Success
@@ -15,6 +16,7 @@ Exit codes:
 """
 import json
 import sys
+import os
 
 
 REQUIRED_PROJECT_FIELDS = {"name", "repo", "status", "last_activity", "tasks"}
@@ -53,7 +55,13 @@ def validate(state: dict) -> list:
 
 
 def main():
-    path = sys.argv[1] if len(sys.argv) > 1 else "teamdev-state.json"
+    if len(sys.argv) > 1:
+        path = sys.argv[1]
+    else:
+        plugin_root = os.environ.get("CLAUDE_PLUGIN_ROOT", None)
+        if plugin_root is None:
+            raise ValueError("CLAUDE_PLUGIN_ROOT is not set and no state file path was provided")
+        path = os.path.join(plugin_root, "teamdev-state.json")
 
     try:
         state = json.load(sys.stdin)

@@ -23,7 +23,9 @@ from datetime import datetime, timezone, timedelta
 
 
 def parse_args():
-    opts = {"compact": False, "project": None, "filter": None, "path": "teamdev-state.json"}
+    plugin_root = os.environ.get("CLAUDE_PLUGIN_ROOT", None)
+    default_path = os.path.join(plugin_root, "teamdev-state.json") if plugin_root else None
+    opts = {"compact": False, "project": None, "filter": None, "path": default_path}
     args = sys.argv[1:]
     i = 0
     while i < len(args):
@@ -38,6 +40,8 @@ def parse_args():
         elif not args[i].startswith("--"):
             opts["path"] = args[i]
         i += 1
+    if opts["path"] is None:
+        raise ValueError("CLAUDE_PLUGIN_ROOT is not set and no state file path was provided")
     return opts
 
 

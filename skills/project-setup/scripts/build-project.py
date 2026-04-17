@@ -21,6 +21,9 @@ Input JSON format (stdin):
 
 Usage: cat project-config.json | build-project.py [path/to/teamdev-state.json]
 
+If no path is given, falls back to ${CLAUDE_PLUGIN_ROOT}/teamdev-state.json.
+Raises ValueError if CLAUDE_PLUGIN_ROOT is not set and no path is provided.
+
 Exit codes:
   0 - Success
   1 - Validation error
@@ -54,7 +57,13 @@ def max_timestamp(timestamps: list) -> str:
 
 
 def main():
-    state_path = sys.argv[1] if len(sys.argv) > 1 else "teamdev-state.json"
+    if len(sys.argv) > 1:
+        state_path = sys.argv[1]
+    else:
+        plugin_root = os.environ.get("CLAUDE_PLUGIN_ROOT", None)
+        if plugin_root is None:
+            raise ValueError("CLAUDE_PLUGIN_ROOT is not set and no state file path was provided")
+        state_path = os.path.join(plugin_root, "teamdev-state.json")
 
     try:
         config = json.load(sys.stdin)
