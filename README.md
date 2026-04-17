@@ -15,10 +15,17 @@ Staleness kicks in after 7 days of inactivity on a finished task or project.
 ```mermaid
 flowchart TD
     hook([SessionStart Hook]):::hook
-    SONNET1([Sonnet self-review]):::review
-    CODEX1([Codex adversarial review]):::review
-    SONNET2([Sonnet self-review]):::review
-    CODEX2([Codex adversarial review]):::review
+    subgraph ir["📋 Issue Review"]
+        SONNET1([Sonnet self-review]):::review
+        CODEX1([Codex adversarial review]):::review
+        SONNET1 --> CODEX1
+    end
+
+    subgraph cr["🔬 Code Review"]
+        SONNET2([Sonnet self-review]):::review
+        CODEX2([Codex adversarial review]):::review
+        SONNET2 --> CODEX2
+    end
 
     subgraph inspection["🔍 Daily Inspection Chain"]
         direction TB
@@ -46,9 +53,11 @@ flowchart TD
     hook --> inspection
     inspection -->|pick an issue to work on| IP
 
-    IT --> SONNET1 --> CODEX1 --> IT
+    IT --> SONNET1
+    CODEX1 --> IT
 
-    RG --> SONNET2 --> CODEX2 --> RG
+    RG --> SONNET2
+    CODEX2 --> RG
 
     classDef hook fill:#f5a623,stroke:#c47d0e,color:#000
     classDef review fill:#d4edda,stroke:#28a745,color:#000
