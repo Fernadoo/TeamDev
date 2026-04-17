@@ -12,6 +12,39 @@ Staleness kicks in after 7 days of inactivity on a finished task or project.
 
 ## Daily Workflow
 
+```mermaid
+flowchart TD
+    hook([SessionStart Hook]):::hook
+
+    subgraph inspection["🔍 Daily Inspection Chain"]
+        direction TB
+        SS[state-sync]
+        IT[issue-triage]
+        II[issue-inspect]
+        TI[task-inspect]
+        PI[project-inspect]
+        ST[status]
+        SS --> IT --> II --> TI --> PI --> ST
+    end
+
+    subgraph dev["⚙️ Development Loop"]
+        direction TB
+        IP[issue-pick]
+        DEV([user develops])
+        RG[review-gate]
+        SH[ship]
+        PC[pr-create]
+        PF[pr-feedback]
+        IP --> DEV --> RG --> SH --> PC --> PF
+        PF -->|changes requested| RG
+    end
+
+    hook --> inspection
+    inspection -->|pick an issue to work on| IP
+
+    classDef hook fill:#f5a623,stroke:#c47d0e,color:#000
+```
+
 1. **Session starts** — the `SessionStart` hook asks whether to run the daily inspection (yes/no). If yes, it runs the inspection chain: `state-sync` → `issue-triage` → `issue-inspect` → `task-inspect` → `project-inspect` → `status`
 2. **Pick an issue** — `/teamdev:issue-pick` to select what to work on
 3. **Develop** — write your code
