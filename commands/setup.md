@@ -19,7 +19,7 @@ If not authenticated, inform the user to run `gh auth login` and stop. Do not pr
 
 ## Step 2: Initialize State File
 
-Check if `teamdev-state.json` exists in the current working directory.
+Check if `${CLAUDE_PLUGIN_ROOT}/teamdev-state.json` exists.
 
 - If it exists: read it and display a summary of existing projects/tasks/issues using `teamdev:status`.
 - If it does not exist: create it with the initial empty structure:
@@ -43,7 +43,7 @@ Use AskUserQuestion to ask the user if they want to set up their first project n
 
 Display a summary:
 - GitHub CLI: authenticated as `<username>`
-- State file: `teamdev-state.json` (new / existing with N projects)
+- State file: `${CLAUDE_PLUGIN_ROOT}/teamdev-state.json` (new / existing with N projects)
 - SessionStart hook: active (daily inspection will run on next session start)
 
 Inform the user the plugin is ready. Mention they can run `/teamdev:help` to see all available commands and skills.
