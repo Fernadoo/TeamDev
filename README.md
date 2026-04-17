@@ -51,13 +51,13 @@ flowchart TD
     end
 
     hook --> inspection
-    inspection -->|pick an issue to work on| IP
+    inspection -->|pick an issue to work on| dev
 
-    IT --> SONNET1
-    CODEX1 --> IT
+    IT --> ir
+    %% ir --> IT
 
-    RG --> SONNET2
-    CODEX2 --> RG
+    RG --> cr
+    %% cr --> RG
 
     classDef hook fill:#f5a623,stroke:#c47d0e,color:#000
     classDef review fill:#d4edda,stroke:#28a745,color:#000
