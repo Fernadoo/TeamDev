@@ -1,0 +1,8 @@
+{
+  "name": "teamdev",
+  "description": "Automates GitHub-based team development workflows: daily issue triage with double-phase review, task/project tracking with staleness detection, two-phase code review gates, structured commit-branch-push pipelines, and PR creation with feedback loops. Maintains a local state file (teamdev-state.json) mirroring your projects, tasks, and issues with live GitHub data.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Fernando Zhu"
+  }
+}
