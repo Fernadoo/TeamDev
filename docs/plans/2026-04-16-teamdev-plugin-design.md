@@ -121,6 +121,41 @@ SessionStart hook (daily-inspection)
                     pr-feedback -> (loop back to review-gate -> ship)
 ```
 
+## Daily Workflow
+
+```mermaid
+flowchart TD
+    hook([SessionStart Hook]):::hook
+
+    subgraph inspection["🔍 Daily Inspection Chain"]
+        direction TB
+        SS[state-sync]
+        IT[issue-triage]
+        II[issue-inspect]
+        TI[task-inspect]
+        PI[project-inspect]
+        ST[status]
+        SS --> IT --> II --> TI --> PI --> ST
+    end
+
+    subgraph dev["⚙️ Development Loop"]
+        direction TB
+        IP[issue-pick]
+        DEV([user develops])
+        RG[review-gate]
+        SH[ship]
+        PC[pr-create]
+        PF[pr-feedback]
+        IP --> DEV --> RG --> SH --> PC --> PF
+        PF -->|changes requested| RG
+    end
+
+    hook --> inspection
+    inspection -->|pick an issue to work on| IP
+
+    classDef hook fill:#f5a623,stroke:#c47d0e,color:#000
+```
+
 ### File Structure
 
 ```
